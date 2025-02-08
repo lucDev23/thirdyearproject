@@ -23,19 +23,24 @@ app.get("/", (req, res) => {
 
 const players = {}; // Almacenar jugadores
 
-// ⚡ Iniciar servidor con `app.listen()` y vincular Socket.IO correctamente
 const server = app.listen(APP_CONSTS.SERVER_PORT, () => {
     console.log(`Server running at http://localhost:${APP_CONSTS.SERVER_PORT}`);
 });
 
-// Crear instancia de Socket.IO y vincularla al servidor
 const io = new Server(server);
 
 io.on("connection", (socket) => {
     console.log(`Jugador conectado: ${socket.id}`);
 
-    // Asignar posición aleatoria
-    players[socket.id] = { x: Math.random() * 800, y: Math.random() * 600 };
+    // Eliminar cualquier jugador anterior con el mismo ID (caso de reconexión)
+    if (players[socket.id]) {
+        delete players[socket.id];
+    }
+
+    // Asignar nueva posición y rotación
+    players[socket.id] = { x: Math.random() * 800, y: Math.random() * 600, rotation: 0 };
+
+    // Enviar lista de jugadores actualizada
     io.emit("updatePlayers", players);
 
     // Mover jugador
@@ -43,14 +48,20 @@ io.on("connection", (socket) => {
         if (players[socket.id]) {
             players[socket.id].x = data.x;
             players[socket.id].y = data.y;
+            players[socket.id].rotation = data.rotation;
             io.emit("updatePlayers", players);
         }
     });
 
+    // Manejar disparos
+    socket.on("fireMissile", (missileData) => {
+        io.emit("spawnMissile", missileData);
+    });
+
     // Manejar desconexión
     socket.on("disconnect", () => {
-        console.log(`Jugador desconectado: ${socket.id}`);
-        delete players[socket.id];
-        io.emit("updatePlayers", players);
-    });
+		console.log(`Jugador desconectado: ${socket.id}`);
+		delete players[socket.id]; // Eliminar del servidor
+		io.emit("updatePlayers", players); // Enviar actualización a todos
+	});	
 });
