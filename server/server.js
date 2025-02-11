@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 import { APP_CONSTS } from "../config/app-const.js";
+import userRoutes from './routes/user-routes.js';
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.set("views", path.join(_dirname, "views"));
 app.get("/", (req, res) => {
     res.render("index");
 });
+
+app.use("/game", userRoutes);
 
 const players = {}; // Almacenar jugadores
 
