@@ -32,6 +32,7 @@ function preload() {
     this.load.image("bismarck", "/assets/bismarck.png");
     this.load.image("bismarck_missile", "/assets/bismarck_missile.png");
 	this.load.image("airship", "/assets/airship.png");
+    this.load.image("airship_missile", "/assets/airship_missile.png");
 }
 
 function create() {
