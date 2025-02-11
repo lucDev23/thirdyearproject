@@ -38,16 +38,8 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		this.canShoot = true;
 		this.shootDelay = 3000; // 500ms entre disparos
 
-		this.mouseX = this.x;
-		this.mouseY = this.y;
-
-		// Capturar la posición del mouse sin necesidad de hacer clic
-		this.scene.input.on("pointermove", (pointer) => {
-			if (pointer) {
-				this.mouseX = pointer.worldX;
-				this.mouseY = pointer.worldY;
-			}
-		});
+		// Capturar la posición del mouse
+		this.pointer = this.scene.input.activePointer;
 	}
 
 	update() {
