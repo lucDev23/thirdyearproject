@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	box-sizing: border-box;
+	height: 550px;
+}
+
+#background {
+	place-self: center;
+	height: 550px;
+	object-fit: contain;
+	z-index: -1;
+}
+
+#phaser-game {
+	position: absolute;
+	height: 550px;
+	width: 935.54px;
+	pointer-events: none;
+}
