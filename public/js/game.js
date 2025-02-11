@@ -1,4 +1,8 @@
+//MODELS
 import Bismarck from "./models/Bismarck.js";
+
+//HELPERS
+import { setupTerrain } from "./helpers/terrain.js";
 
 const parentDiv = document.getElementById("phaser-game");
 
@@ -12,7 +16,9 @@ const config = {
     transparent: true,
     physics: {
         default: "arcade",
-        arcade: { debug: false }
+        arcade: { 
+			debug: true, 
+		}
     },
     scene: { preload, create, update }
 };
@@ -25,6 +31,8 @@ function preload() {
 }
 
 function create() {
+	setupTerrain(this);
+
     bismarck = new Bismarck(this, 0, 100, socket);
 
 }
