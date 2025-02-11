@@ -1,3 +1,5 @@
+import AirshipMissile from "./SwordfishMissile.js";
+
 export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, socket) {
         // Definir un margen de seguridad desde los bordes superior e inferior
@@ -15,6 +17,10 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        // Control de disparo
+        this.canShoot = true; // Variable de control de disparos
+        this.shootDelay = 4000; // 1000ms (1 segundo) entre disparos
+
         // Ajustar el punto de origen y tamaño
         this.setOrigin(0.5, 0.5); // Centrar el origen en el medio del sprite
         this.setScale(0.8);
@@ -22,7 +28,6 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
 
         // Establecer la forma de colisión como un círculo centrado
         const radius = Math.max(this.width, this.height) / 2;
-        // Ahora usamos el offset (0,0) para que la colisión esté centrada
         this.body.setCircle(radius); // Establecer círculo con el radio adecuado
 
         // Aplicar físicas con inercia
@@ -32,6 +37,7 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
 
         // Configurar teclas de control
         this.cursors = scene.input.keyboard.createCursorKeys();
+        this.spaceKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // Tecla de disparo
 
         // Configuración de movimiento
         this.speed = 33; // Velocidad máxima de movimiento
@@ -55,9 +61,42 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         // Movimiento hacia adelante automáticamente desde el inicio
         this.scene.physics.velocityFromRotation(this.rotation - Math.PI, this.speed, this.body.velocity);
 
+        // Disparo de misiles cuando se presiona la tecla Espacio, con cooldown
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.canShoot) {
+            this.shootMissile();
+        }
+
         // Enviar posición al servidor
         if (this.socket) {
             this.socket.emit("move", { x: this.x, y: this.y, rotation: this.rotation });
         }
+    }
+
+    shootMissile() {
+        // Crear el misil "airship_missile" en la posición del avión
+        const missile = new AirshipMissile(this.scene, this.x, this.y, this.rotation);  // Usar la clase AirshipMissile
+
+        // Habilitar físicas para el misil
+        this.scene.physics.add.existing(missile);
+
+        // Calcular el ángulo hacia el que se debe disparar
+        const invertedRotation = this.rotation + Math.PI; // Invertir la dirección del disparo
+
+        // Ajustar la velocidad del misil en la dirección invertida
+        const speed = 70; // Velocidad del misil
+        this.scene.physics.velocityFromRotation(invertedRotation, speed, missile.body.velocity);
+
+        // Eliminar el misil después de 6 segundos
+        this.scene.time.delayedCall(6000, () => {
+            missile.destroy();
+        }, [], this);
+
+        // Establecer el cooldown entre disparos
+        this.canShoot = false;
+
+        // Restablecer el cooldown después del tiempo definido
+        this.scene.time.delayedCall(this.shootDelay, () => {
+            this.canShoot = true;
+        }, [], this);
     }
 }
