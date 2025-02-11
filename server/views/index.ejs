@@ -6,16 +6,17 @@
     <title>Juego con Phaser y Socket.IO</title>
     
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+    <script src="/phaser/phaser.min.js"></script>
     
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Estilos -->
+    <link rel="stylesheet" href="/css/game-terrain.css">
     
     <script defer src="/js/socket-client.js"></script>
     <script defer src="/js/game.js"></script>
 </head>
 <body>
-    <div id="game-container">
-        <div id="phaser-game"></div> <!-- Aquí se renderiza el juego -->
+    <div id="container">
+        <img id="background" src="/assets/game_terrain.png" alt="Fondo del juego">
+        <div id="phaser-game"></div>
     </div>
 </body>
 </html>
