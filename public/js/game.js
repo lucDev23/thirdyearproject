@@ -21,11 +21,11 @@ const game = new Phaser.Game(config);
 let bismarck;
 
 function preload() {
-    this.load.image("bismarck", "/assets/bismarck.png");
+    this.load.image("bismarck", "/assets/bismarck_2.png");
 }
 
 function create() {
-    bismarck = new Bismarck(this, 400, 300, socket);
+    bismarck = new Bismarck(this, 0, 100, socket);
 }
 
 function update() {

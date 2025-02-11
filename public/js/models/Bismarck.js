@@ -8,53 +8,56 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        // Ajustar el punto de origen para girar más desde adelante
-        this.setOrigin(0.5, 0.85);
-        this.setScale(0.2);
+        // Ajustar el punto de origen y tamaño
+        this.setOrigin(0.5, 0.7);
+        this.setScale(0.5)
         this.setCollideWorldBounds(true);
 
-        // Aplicar físicas ajustadas
+        // Aplicar físicas con inercia
         this.setDamping(true);
-        this.setDrag(0.99); // Menos inercia, pero aún con efecto de deslizamiento
-        this.setMaxVelocity(80); // Velocidad máxima reducida
+        this.setDrag(0.98); // Mantiene la inercia pero evita que se deslice demasiado
+        this.setMaxVelocity(100); // Límite de velocidad máxima
 
         // Configurar teclas de control
         this.cursors = scene.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D
         });
 
-        // Configuración de movimiento ajustado
-        this.acceleration = 2; // Aceleración lenta
-        this.maxSpeed = 80; // Velocidad máxima reducida
-        this.rotationSpeed = 0.03; // Gira más suavemente
+        // Configuración de movimiento
+        this.speed = 10; // Velocidad máxima de movimiento
+        this.rotationSpeed = 5; // Velocidad de giro
+        this.acceleration = 0.05; // Valor inicial de aceleración
+        this.currentSpeed = 0; // Velocidad actual del barco
     }
 
     update() {
-        // Rotación del barco (A y D) → Sin angular velocity
+        // Rotación del barco (A y D) con inercia
         if (this.cursors.left.isDown) {
-            this.rotation -= this.rotationSpeed;
+            this.setAngularVelocity(-this.rotationSpeed);
         } else if (this.cursors.right.isDown) {
-            this.rotation += this.rotationSpeed;
+            this.setAngularVelocity(this.rotationSpeed);
+        } else {
+            this.setAngularVelocity(0);
         }
 
-        // Movimiento hacia adelante con aceleración progresiva
+        // Aceleración progresiva cuando se presiona W
         if (this.cursors.up.isDown) {
-            let velocityX = Math.cos(this.rotation) * this.acceleration;
-            let velocityY = Math.sin(this.rotation) * this.acceleration;
-            this.setVelocity(this.body.velocity.x + velocityX, this.body.velocity.y + velocityY);
+            if (this.currentSpeed < this.speed) {
+                this.currentSpeed += this.acceleration; // Aumenta progresivamente hasta `this.speed`
+            }
+            this.scene.physics.velocityFromRotation(this.rotation, this.currentSpeed, this.body.velocity);
         } 
-        // Movimiento hacia atrás con menor aceleración
-        else if (this.cursors.down.isDown) {
-            let velocityX = Math.cos(this.rotation) * -this.acceleration / 2;
-            let velocityY = Math.sin(this.rotation) * -this.acceleration / 2;
-            this.setVelocity(this.body.velocity.x + velocityX, this.body.velocity.y + velocityY);
-        } 
-        // Si no hay aceleración, permite que la inercia actúe
+
+        // Si no se presiona W, la velocidad disminuye gradualmente (desaceleración suave)
         else {
-            this.setAcceleration(0);
+            if (this.currentSpeed > 0) {
+                this.currentSpeed -= this.acceleration; // Resta aceleración hasta llegar a 0
+            } else {
+                this.currentSpeed = 0;
+            }
+            this.scene.physics.velocityFromRotation(this.rotation, this.currentSpeed, this.body.velocity);
         }
 
         // Enviar posición al servidor
