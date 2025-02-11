@@ -1,3 +1,5 @@
+import Bismarck from "./models/Bismarck.js";
+
 const parentDiv = document.getElementById("phaser-game");
 
 const config = {
@@ -22,11 +24,11 @@ const config = {
 const game = new Phaser.Game(config);
 
 function preload() {
-
+    this.load.image("bismarck", "/assets/bismarck.png");
 }
 
 function create() {
-
+    bismarck = new Bismarck(this, 400, 300);
 }
 
 function update() {
