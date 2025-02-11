@@ -1,21 +1,24 @@
 export default class BismarckMissile extends Phaser.Physics.Arcade.Sprite {
-	constructor(scene, x, y, rotation) {
-			super(scene, x, y, "missile");
+	constructor(scene, x, y, angle) {
+		super(scene, x, y, "bismarck_missile");
 
-			this.scene = scene;
+		this.scene = scene;
 
-			// Agregar el misil a la escena y habilitar físicas
-			scene.add.existing(this);
-			scene.physics.add.existing(this);
+		// Agregar el misil a la escena y habilitar físicas
+		scene.add.existing(this);
+		scene.physics.add.existing(this);
 
-			// Configuración del misil
-			this.setScale(0.1);
-			this.setRotation(rotation);
-			scene.physics.velocityFromRotation(rotation, 300, this.body.velocity); // Velocidad fija
+		// Configuración del misil
+		this.setScale(0.5);
+		this.setRotation(angle);
+		
+		// Calcular la velocidad basada en el ángulo
+		const speed = 50;
+		scene.physics.velocityFromRotation(angle, speed, this.body.velocity);
 
-			// Eliminar el misil después de un tiempo
-			scene.time.delayedCall(3000, () => {
-					this.destroy();
-			}, [], this);
+		// Eliminar el misil después de 6 segundos
+		scene.time.delayedCall(6000, () => {
+			this.destroy();
+		}, [], this);
 	}
 }

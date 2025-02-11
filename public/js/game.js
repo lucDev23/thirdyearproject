@@ -17,7 +17,7 @@ const config = {
     physics: {
         default: "arcade",
         arcade: { 
-			debug: true, 
+			debug: false, 
 		}
     },
     scene: { preload, create, update }
@@ -28,6 +28,7 @@ let bismarck;
 
 function preload() {
     this.load.image("bismarck", "/assets/bismarck.png");
+	this.load.image("bismarck_missile", "/assets/bismarck_missile.png");
 }
 
 function create() {
