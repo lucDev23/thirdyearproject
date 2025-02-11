@@ -10,7 +10,7 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 
         // Ajustar el punto de origen y tamaño
         this.setOrigin(0.5, 0.7);
-        this.setScale(0.5)
+        this.setScale(1)
         this.setCollideWorldBounds(true);
 
         // Aplicar físicas con inercia
@@ -26,9 +26,9 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
         });
 
         // Configuración de movimiento
-        this.speed = 10; // Velocidad máxima de movimiento
-        this.rotationSpeed = 5; // Velocidad de giro
-        this.acceleration = 0.05; // Valor inicial de aceleración
+        this.speed = 6; // Velocidad máxima de movimiento
+        this.rotationSpeed = 3; // Velocidad de giro
+        this.acceleration = 0.02; // Valor inicial de aceleración
         this.currentSpeed = 0; // Velocidad actual del barco
     }
 
