@@ -1,13 +1,14 @@
-//MODELS
+// MODELS
 import Bismarck from "./models/Bismarck.js";
-import Swordfish from "./models/Swordfish.js"; // Importa Swordfish
+import Swordfish from "./models/Swordfish.js";
 
-//HELPERS
+// HELPERS
 import { setupTerrain } from "./helpers/terrain.js";
 
-const parentDiv = document.getElementById("phaser-game");
+// SOCKETS
+import { joinGame, setupBismarckSocketListeners, setupSwordfishSocketListeners, socket } from "./sockets/client-socket-manager.js";
 
-const socket = io();
+const parentDiv = document.getElementById("phaser-game");
 
 const config = {
     type: Phaser.AUTO,
@@ -17,32 +18,72 @@ const config = {
     transparent: true,
     physics: {
         default: "arcade",
-        arcade: { 
-			debug: false, 
-		}
+        arcade: { debug: false }
     },
     scene: { preload, create, update }
 };
 
 const game = new Phaser.Game(config);
-let bismarck;
-let airship;
+
+let bismarck = null;
+let airship = null;
+let playerRole = null;
 
 function preload() {
     this.load.image("bismarck", "/assets/bismarck.png");
     this.load.image("bismarck_missile", "/assets/bismarck_missile.png");
-	this.load.image("airship", "/assets/airship.png");
+    this.load.image("airship", "/assets/airship.png");
     this.load.image("airship_missile", "/assets/airship_missile.png");
 }
 
-function create() {
-	setupTerrain(this);
+async function create() {
+    setupTerrain(this);
 
-    bismarck = new Bismarck(this, 0, 100, socket);
-    airship = new Swordfish(this, 100, 100, socket); // Usar la clase correcta
+    playerRole = await joinGame();
+
+    socket.on("create-bismarck", (position) => {
+        if (!bismarck) {
+			console.log(position);
+            console.log("Creando Bismarck...");
+            bismarck = new Bismarck(this, position.x, position.y, socket);
+            setupBismarckSocketListeners(bismarck, this);
+        }
+    });
+
+    socket.on("create-swordfish", (position) => {
+        if (!airship) {
+			console.log(position)
+            console.log("Creando Swordfish...");
+            airship = new Swordfish(this, position.x, position.y, socket);
+            setupSwordfishSocketListeners(airship);
+        }
+    });
+
+    // **Eliminar el Bismarck cuando el servidor lo indique**
+    socket.on("remove-bismarck", () => {
+        if (bismarck) {
+            console.log("Eliminando Bismarck...");
+            bismarck.destroy();
+            bismarck = null;
+        }
+    });
+
+    // **Eliminar el Swordfish cuando el servidor lo indique**
+    socket.on("remove-swordfish", () => {
+        if (airship) {
+            console.log("Eliminando Swordfish...");
+            airship.destroy();
+            airship = null;
+        }
+    });
 }
 
 function update() {
-    if (bismarck) bismarck.update();
-    if (airship) airship.update();
+    if (bismarck && playerRole === "bismarck") {
+        bismarck.update();
+    }
+
+    if (airship && playerRole === "swordfish") {
+        airship.update();
+    }
 }

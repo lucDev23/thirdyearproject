@@ -7,9 +7,9 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         const safeHeight = scene.scale.height - margin; // Altura segura de la pantalla
 
         // Generar una posición aleatoria en el eje vertical dentro del rango seguro
-        const randomY = Phaser.Math.Between(margin, safeHeight); // Ahora no puede estar demasiado cerca de los bordes
+         // Ahora no puede estar demasiado cerca de los bordes
 
-        super(scene, scene.scale.width - x, randomY, "airship"); // Posición espejada con Y aleatorio
+        super(scene, scene.scale.width - x, y, "airship"); // Posición espejada con Y aleatorio
 
         this.scene = scene;
         this.socket = socket;
@@ -59,7 +59,9 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         this.rotation += this.turnVelocity;
 
         // Movimiento hacia adelante automáticamente desde el inicio
-        this.scene.physics.velocityFromRotation(this.rotation - Math.PI, this.speed, this.body.velocity);
+        setTimeout(() => {
+            this.scene.physics.velocityFromRotation(this.rotation - Math.PI, this.speed, this.body.velocity);
+        }, 10000000);
 
         // Disparo de misiles cuando se presiona la tecla Espacio, con cooldown
         if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.canShoot) {
