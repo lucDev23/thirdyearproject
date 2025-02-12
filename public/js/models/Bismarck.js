@@ -45,6 +45,8 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 
 		// Capturar la posición del mouse
 		this.pointer = this.scene.input.activePointer;
+
+		this.setDepth(1);
 	}
 
 	update() {

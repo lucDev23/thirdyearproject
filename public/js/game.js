@@ -53,7 +53,7 @@ async function create() {
 
     socket.on("create-swordfish", (position) => {
         if (!airship) {
-            console.log("Creando Swordfish...");
+            // console.log("Creando Swordfish...");
             airship = new Swordfish(this, position.x, position.y, socket);
             setupSwordfishSocketListeners(airship, this);
         }
@@ -61,7 +61,6 @@ async function create() {
 		this.physics.add.overlap(airship, this.bismarckMissiles, (swordfish, missile) => {
 			console.log("¡Colisión detectada!");
 			missile.destroy();
-			swordfish.destroy();
 
 			sendBismarckHitSwordfish();
 		});
@@ -70,7 +69,7 @@ async function create() {
     // **Eliminar el Bismarck cuando el servidor lo indique**
     socket.on("remove-bismarck", () => {
         if (bismarck) {
-            console.log("Eliminando Bismarck...");
+            // console.log("Eliminando Bismarck...");
             bismarck.destroy();
             bismarck = null;
         }
@@ -79,7 +78,7 @@ async function create() {
     // **Eliminar el Swordfish cuando el servidor lo indique**
     socket.on("remove-swordfish", () => {
         if (airship) {
-            console.log("Eliminando Swordfish...");
+            // console.log("Eliminando Swordfish...");
             airship.destroy();
             airship = null;
         }
