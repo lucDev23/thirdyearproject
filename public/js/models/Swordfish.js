@@ -2,7 +2,7 @@ import AirshipMissile from "./SwordfishMissile.js";
 
 //SOCKET EVENTS
 import { sendSwordfishMovement } from "../sockets/client-socket-manager.js";
-import { Position } from "./Position.js";
+import  Position  from "./Position.js";
 
 export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, socket) {
@@ -48,6 +48,8 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+		if (!this.active) return;
+
         // Rotación con inercia
         if (this.cursors.left.isDown) {
             this.turnVelocity = Math.max(this.turnVelocity - this.turnAcceleration, -this.rotationSpeed);
@@ -76,7 +78,7 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
 
     shootMissile() {
         // Calcular la posición de inicio del misil un poco adelante del avión
-        const missileOffset = 50;
+        const missileOffset = 0;
         const missileX = this.x + Math.cos(this.rotation) * missileOffset;
         const missileY = this.y + Math.sin(this.rotation) * missileOffset;
 
