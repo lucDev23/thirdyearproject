@@ -8,6 +8,10 @@ export default class BismarckMissile extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 
+		if (scene.bismarckMissiles) {
+            scene.bismarckMissiles.add(this);
+        }
+
 		// Configuración del misil
 		this.setScale(0.5);
 		this.setRotation(angle);

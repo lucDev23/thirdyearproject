@@ -22,6 +22,10 @@ export function sendBismarckFire(missile) {
 	socket.emit("bismarck-fire", missile);
 }
 
+export function sendBismarckHitSwordfish() {
+	socket.emit("bismarck-hit-swordfish");
+}
+
 // Emitir movimiento del Swordfish
 export function sendSwordfishMovement(position) {
     socket.emit("swordfish-move", position);
