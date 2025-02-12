@@ -6,7 +6,7 @@ import Swordfish from "./models/Swordfish.js";
 import { setupTerrain } from "./helpers/terrain.js";
 
 // SOCKETS
-import { joinGame, setupBismarckSocketListeners, setupSwordfishSocketListeners, socket } from "./sockets/client-socket-manager.js";
+import { joinGame, sendBismarckHitSwordfish, setupBismarckSocketListeners, setupSwordfishSocketListeners, socket } from "./sockets/client-socket-manager.js";
 
 const parentDiv = document.getElementById("phaser-game");
 
@@ -39,6 +39,8 @@ function preload() {
 async function create() {
     setupTerrain(this);
 
+	this.bismarckMissiles = this.physics.add.group();
+
     playerRole = await joinGame();
 
     socket.on("create-bismarck", (position) => {
@@ -55,6 +57,14 @@ async function create() {
             airship = new Swordfish(this, position.x, position.y, socket);
             setupSwordfishSocketListeners(airship, this);
         }
+
+		this.physics.add.overlap(airship, this.bismarckMissiles, (swordfish, missile) => {
+			console.log("¡Colisión detectada!");
+			missile.destroy();
+			swordfish.destroy();
+
+			sendBismarckHitSwordfish();
+		});
     });
 
     // **Eliminar el Bismarck cuando el servidor lo indique**

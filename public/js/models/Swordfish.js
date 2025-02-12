@@ -3,7 +3,8 @@ import Missile from "./Missile.js";
 import Position  from "./Position.js";
 
 //SOCKET EVENTS
-import { sendSwordfishFire, sendSwordfishPosition } from "../sockets/client-socket-manager.js";
+import { sendSwordfishFire, sendSwordfishMovement } from "../sockets/client-socket-manager.js";
+import  Position  from "./Position.js";
 
 export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, socket) {
@@ -49,6 +50,8 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+		if (!this.active) return;
+
         // Rotación con inercia
         if (this.cursors.left.isDown) {
             this.turnVelocity = Math.max(this.turnVelocity - this.turnAcceleration, -this.rotationSpeed);

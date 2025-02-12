@@ -18,6 +18,8 @@ export class ServerSocketManager {
 
 			socket.on("bismarck-fire", (missile) => this.handleBismarckFire(socket, missile));
 
+			socket.on("bismarck-hit-swordfish", () => this.handleBismarckHitSwordfish(socket));
+
             socket.on("swordfish-move", (position) => this.handleSwordfishPosition(socket, position));
 
             socket.on("swordfish-fire", (missile) => this.handleSwordfishFire(socket, missile));
@@ -81,6 +83,27 @@ export class ServerSocketManager {
 		this.io.emit("bismarck-fire", missile);
     }
 
+	handleBismarckHitSwordfish(socket) {
+		console.log(`SERVER: Hit recibido del socket ${socket.id} - destruyendo Swordfish y reiniciando en 1 segundo.`);
+	
+		// Emitir el evento para que todos los clientes eliminen el Swordfish
+		this.io.emit("remove-swordfish");
+	
+		// Esperar 1 segundo para recrear la entidad del Swordfish
+		setTimeout(() => {
+			// Obtener el jugador que controla el Swordfish
+			const swordfishPlayer = this.getSwordfishPlayer();
+			if (swordfishPlayer) {
+				// Establecer una posición de reaparición (modifica las coordenadas según necesites)
+				const spawnPosition = new Position(0, 300, 0);
+				swordfishPlayer.position = spawnPosition;
+				// Emitir el evento para que los clientes creen nuevamente el Swordfish
+				this.io.emit("create-swordfish", spawnPosition);
+				console.log("SERVER: Reaparición del Swordfish emitida", spawnPosition);
+			}
+		}, 1000);
+	}
+	
     handleSwordfishPosition(socket, position) {
 		// **Guardar la posición en el servidor**
 		const player = this.getSwordfishPlayer();
