@@ -3,8 +3,7 @@ import Missile from "./Missile.js";
 import Position  from "./Position.js";
 
 //SOCKET EVENTS
-import { sendSwordfishFire, sendSwordfishMovement } from "../sockets/client-socket-manager.js";
-import  Position  from "./Position.js";
+import { sendSwordfishFire, sendSwordfishPosition } from "../sockets/client-socket-manager.js";
 
 export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, socket) {
@@ -47,6 +46,8 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         // Control de disparo
         this.canShoot = true;
         this.shootDelay = 4000;
+
+		this.setDepth(2);
     }
 
     update() {

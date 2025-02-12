@@ -33,7 +33,6 @@ export function sendSwordfishPosition(position) {
 }
 
 export function sendSwordfishFire(missile) {
-    console.log(missile);
 	socket.emit("swordfish-fire", missile);
 }
 
