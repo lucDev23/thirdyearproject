@@ -6,7 +6,7 @@ import Swordfish from "./models/Swordfish.js";
 import { setupTerrain } from "./helpers/terrain.js";
 
 // SOCKETS
-import { joinGame, socket } from "./sockets/game-socket.js";
+import { joinGame, setupBismarckSocketListeners, socket } from "./sockets/client-game-socket.js";
 
 const parentDiv = document.getElementById("phaser-game");
 
@@ -37,13 +37,16 @@ function preload() {
 function create() {
     setupTerrain(this);
 
-    // bismarck = new Bismarck(this, 0, 100, socket);
-    airship = new Swordfish(this, 0, socket);
+    bismarck = new Bismarck(this, 0, 100, socket);
+    // airship = new Swordfish(this, 0, socket);
 
     joinGame();
+    setupBismarckSocketListeners(this);
 }
 
 function update() {
-    if (bismarck) bismarck.update();
+    if (bismarck && ) {
+        bismarck.update();
+    }
     if (airship) airship.update();
 }
