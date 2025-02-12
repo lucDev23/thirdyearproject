@@ -43,7 +43,6 @@ async function create() {
 
     socket.on("create-bismarck", (position) => {
         if (!bismarck) {
-			console.log(position);
             console.log("Creando Bismarck...");
             bismarck = new Bismarck(this, position.x, position.y, socket);
             setupBismarckSocketListeners(bismarck, this);
@@ -52,7 +51,6 @@ async function create() {
 
     socket.on("create-swordfish", (position) => {
         if (!airship) {
-			console.log(position)
             console.log("Creando Swordfish...");
             airship = new Swordfish(this, position.x, position.y, socket);
             setupSwordfishSocketListeners(airship);

@@ -1,8 +1,9 @@
 import BismarckMissile from "./BismarckMissile.js";
+import Missile from "./Missile.js";
+import Position from "./Position.js";
 
 //SOCKET EVENTS
-import { sendBismarckMovement } from "../sockets/client-socket-manager.js";
-import { Position } from "./Position.js";
+import { sendBismarckFire, sendBismarckPosition } from "../sockets/client-socket-manager.js";
 
 export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, socket) {
@@ -77,25 +78,29 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		// Enviar posición al servidor
-		sendBismarckMovement(new Position(this.x, this.y, this.rotation));
+		sendBismarckPosition(new Position(this.x, this.y, this.rotation));
 	}
 
 	shootMissile() {
 		// Calcular la posición de inicio del misil un poco adelante del barco
-		const missileOffset = 50; // Distancia adelante
+		const missileOffset = 40; // Distancia adelante
 		const missileX = this.x + Math.cos(this.rotation) * missileOffset;
 		const missileY = this.y + Math.sin(this.rotation) * missileOffset;
 
 		// Calcular el ángulo hacia el mouse
 		const targetAngle = Phaser.Math.Angle.Between(missileX, missileY, this.pointer.worldX, this.pointer.worldY);
 
-		// Crear el misil
-		new BismarckMissile(this.scene, missileX, missileY, targetAngle);
+		// new BismarckMissile(this.scene, missileX, missileY, targetAngle);
+		this.sendBismarckMissile(missileX, missileY, targetAngle);
 
 		// Establecer el delay de disparo
 		this.canShoot = false;
 		this.scene.time.delayedCall(this.shootDelay, () => {
 			this.canShoot = true;
 		});
+	}
+
+	sendBismarckMissile(x, y, rotation) {
+		sendBismarckFire(new Missile("bismarck", new Position(x, y, rotation)))
 	}
 }

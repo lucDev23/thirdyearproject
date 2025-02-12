@@ -1,4 +1,4 @@
-export class Player {
+export default class Player {
 	constructor(socketId, type, position) {
 		this.socketId = socketId;
 		this.type = type;
