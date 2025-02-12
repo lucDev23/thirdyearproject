@@ -14,9 +14,11 @@ export class ServerSocketManager {
 
             socket.on("join-game", () => this.handleJoinGame(socket));
 
-            socket.on("bismarck-move", (position) => this.handleBismarckMove(socket, position));
+            socket.on("bismarck-move", (position) => this.handleBismarckPosition(socket, position));
 
-            socket.on("swordfish-move", (position) => this.handleSwordfishMove(socket, position));
+			socket.on("bismarck-fire", (missile) => this.handleBismarckFire(socket, missile));
+
+            socket.on("swordfish-move", (position) => this.handleSwordfishPosition(socket, position));
 
             socket.on("disconnect", () => this.handleDisconnect(socket));
         });
@@ -61,11 +63,23 @@ export class ServerSocketManager {
 		}
 	}
 
-    handleBismarckMove(socket, position) {
+    handleBismarckPosition(socket, position) {
+		// **Guardar la posición en el servidor**
+		const player = this.getBismarckPlayer();
+		if (player) {
+			player.position = position;
+		}
+	
+		// **Reenviar la posición a todos los clientes, incluido el que movió**
 		socket.broadcast.emit("bismarck-move", position);
+	}
+	
+
+	handleBismarckFire(socket, missile) {
+		this.io.emit("bismarck-fire", missile);
     }
 
-    handleSwordfishMove(socket, movement) {
+    handleSwordfishPosition(socket, movement) {
         socket.broadcast.emit("swordfish-move", movement);
     }
 
