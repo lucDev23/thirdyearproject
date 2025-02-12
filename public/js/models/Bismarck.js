@@ -1,5 +1,8 @@
 import BismarckMissile from "./BismarckMissile.js";
 
+//SOCKET EVENTS
+import { sendPlayerMovement } from "../sockets/game-socket.js";
+
 export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, socket) {
 		super(scene, x, y, "bismarck");
@@ -73,9 +76,7 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		// Enviar posición al servidor
-		if (this.socket) {
-			this.socket.emit("move", { x: this.x, y: this.y, rotation: this.rotation });
-		}
+		sendPlayerMovement(this.x, this.y, this.rotation);
 	}
 
 	shootMissile() {

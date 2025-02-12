@@ -1,13 +1,14 @@
-//MODELS
+// MODELS
 import Bismarck from "./models/Bismarck.js";
-import Swordfish from "./models/Swordfish.js"; // Importa Swordfish
+import Swordfish from "./models/Swordfish.js";
 
-//HELPERS
+// HELPERS
 import { setupTerrain } from "./helpers/terrain.js";
 
-const parentDiv = document.getElementById("phaser-game");
+// SOCKETS
+import { socket } from "./sockets/game-socket.js";
 
-const socket = io();
+const parentDiv = document.getElementById("phaser-game");
 
 const config = {
     type: Phaser.AUTO,
@@ -17,9 +18,7 @@ const config = {
     transparent: true,
     physics: {
         default: "arcade",
-        arcade: { 
-			debug: false, 
-		}
+        arcade: { debug: false }
     },
     scene: { preload, create, update }
 };
@@ -27,19 +26,30 @@ const config = {
 const game = new Phaser.Game(config);
 let bismarck;
 let airship;
+window.players = {}; // Objeto global para manejar jugadores
 
 function preload() {
     this.load.image("bismarck", "/assets/bismarck.png");
     this.load.image("bismarck_missile", "/assets/bismarck_missile.png");
-	this.load.image("airship", "/assets/airship.png");
+    this.load.image("airship", "/assets/airship.png");
     this.load.image("airship_missile", "/assets/airship_missile.png");
 }
 
 function create() {
-	setupTerrain(this);
+    setupTerrain(this);
 
-    bismarck = new Bismarck(this, 0, 100, socket);
-    airship = new Swordfish(this, 100, 100, socket); // Usar la clase correcta
+    socket.emit("join-game"); // Notificar al servidor que se une al juego
+
+    // Esperar a que el servidor asigne el rol antes de crear la nave
+    socket.on("assign-role", (data) => {
+        if (data.role === "bismarck") {
+            bismarck = new Bismarck(this, 0, 100, socket);
+            window.players[socket.id] = bismarck;
+        } else {
+            airship = new Swordfish(this, 100, 100, socket);
+            window.players[socket.id] = airship;
+        }
+    });
 }
 
 function update() {
