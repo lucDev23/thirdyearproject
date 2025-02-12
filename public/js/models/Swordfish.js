@@ -1,7 +1,7 @@
 import AirshipMissile from "./SwordfishMissile.js";
 
 export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, socket) {
+    constructor(scene, x, socket) {
         // Definir un margen de seguridad desde los bordes superior e inferior
         const margin = 50; // Margen de 50 píxeles desde los bordes
         const safeHeight = scene.scale.height - margin; // Altura segura de la pantalla
@@ -59,7 +59,9 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         this.rotation += this.turnVelocity;
 
         // Movimiento hacia adelante automáticamente desde el inicio
-        this.scene.physics.velocityFromRotation(this.rotation - Math.PI, this.speed, this.body.velocity);
+        setTimeout(() => {
+            this.scene.physics.velocityFromRotation(this.rotation - Math.PI, this.speed, this.body.velocity);
+        }, 1000);
 
         // Disparo de misiles cuando se presiona la tecla Espacio, con cooldown
         if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.canShoot) {

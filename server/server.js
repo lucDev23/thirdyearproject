@@ -23,6 +23,7 @@ const app = express();
 // Configuración de archivos estáticos
 app.use(express.static(path.join(_dirname, "../public")));
 app.use("/phaser", express.static(path.join(_dirname, "../node_modules/phaser/dist")));
+app.use("/socket.io", express.static(path.join(_dirname, "../node_modules/socket.io/client-dist")));
 
 // Configuración de EJS como motor de vistas
 app.set("view engine", "ejs");

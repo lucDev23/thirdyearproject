@@ -6,11 +6,8 @@ export function setupGameSocket(io) {
     io.on('connection', (socket) => {
         console.log(`Jugador conectado: ${socket.id}`);
 
-        socket.on('join-game', (type) => {
-            const player = new Player(socket.id, type);
-            players.set(socket.id, player);
-            console.log(`Jugador ${socket.id} es un ${type}`);
-            io.emit('update-players', Array.from(players.values()));
+        socket.on('join-game', () => {
+            console.log(socket.id)
         });
 
         // Escuchar movimientos y actualizar a todos los jugadores

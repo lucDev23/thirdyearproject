@@ -1,8 +1,8 @@
 export const socket = io(); // Conectarse al servidor WebSocket
 
 // Emitir evento de unión al juego
-export function joinGame(type) {
-    socket.emit("join-game", type);
+export function joinGame() {
+    socket.emit("join-game");
 }
 
 // Emitir evento de movimiento del jugador

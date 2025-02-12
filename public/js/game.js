@@ -6,7 +6,7 @@ import Swordfish from "./models/Swordfish.js";
 import { setupTerrain } from "./helpers/terrain.js";
 
 // SOCKETS
-import { socket } from "./sockets/game-socket.js";
+import { joinGame, socket } from "./sockets/game-socket.js";
 
 const parentDiv = document.getElementById("phaser-game");
 
@@ -26,7 +26,6 @@ const config = {
 const game = new Phaser.Game(config);
 let bismarck;
 let airship;
-window.players = {}; // Objeto global para manejar jugadores
 
 function preload() {
     this.load.image("bismarck", "/assets/bismarck.png");
@@ -38,18 +37,10 @@ function preload() {
 function create() {
     setupTerrain(this);
 
-    socket.emit("join-game"); // Notificar al servidor que se une al juego
+    // bismarck = new Bismarck(this, 0, 100, socket);
+    airship = new Swordfish(this, 0, socket);
 
-    // Esperar a que el servidor asigne el rol antes de crear la nave
-    socket.on("assign-role", (data) => {
-        if (data.role === "bismarck") {
-            bismarck = new Bismarck(this, 0, 100, socket);
-            window.players[socket.id] = bismarck;
-        } else {
-            airship = new Swordfish(this, 100, 100, socket);
-            window.players[socket.id] = airship;
-        }
-    });
+    joinGame();
 }
 
 function update() {
