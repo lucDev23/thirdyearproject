@@ -11,7 +11,7 @@ import { Server } from "socket.io";
 // Módulos internos del proyecto
 import { APP_CONSTS } from "../config/app-const.js";
 import userRoutes from "./routes/user-routes.js";
-import { setupGameSocket } from "./sockets/GameSocketManager.js";
+import { ServerSocketManager } from "./sockets/server-socket-manager.js";
 
 // Obtener __dirname en módulos ES
 const _filename = fileURLToPath(import.meta.url);
@@ -40,4 +40,4 @@ const server = app.listen(APP_CONSTS.SERVER_PORT, () => {
 
 // Configuración de WebSocket
 const io = new Server(server);
-new GameSocketManager(io);
+new ServerSocketManager(io);

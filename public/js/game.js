@@ -6,7 +6,7 @@ import Swordfish from "./models/Swordfish.js";
 import { setupTerrain } from "./helpers/terrain.js";
 
 // SOCKETS
-import { joinGame, setupBismarckSocketListeners, socket } from "./sockets/client-game-socket.js";
+import { joinGame, setupBismarckSocketListeners, setupSwordfishSocketListeners, socket } from "./sockets/client-socket-manager.js";
 
 const parentDiv = document.getElementById("phaser-game");
 
@@ -24,8 +24,10 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
-let bismarck;
-let airship;
+
+let bismarck = null;
+let airship = null;
+let playerRole = null;
 
 function preload() {
     this.load.image("bismarck", "/assets/bismarck.png");
@@ -34,19 +36,54 @@ function preload() {
     this.load.image("airship_missile", "/assets/airship_missile.png");
 }
 
-function create() {
+async function create() {
     setupTerrain(this);
 
-    bismarck = new Bismarck(this, 0, 100, socket);
-    // airship = new Swordfish(this, 0, socket);
+    playerRole = await joinGame();
 
-    joinGame();
-    setupBismarckSocketListeners(this);
+    socket.on("create-bismarck", (position) => {
+        if (!bismarck) {
+			console.log(position);
+            console.log("Creando Bismarck...");
+            bismarck = new Bismarck(this, position.x, position.y, socket);
+            setupBismarckSocketListeners(bismarck, this);
+        }
+    });
+
+    socket.on("create-swordfish", (position) => {
+        if (!airship) {
+			console.log(position)
+            console.log("Creando Swordfish...");
+            airship = new Swordfish(this, position.x, position.y, socket);
+            setupSwordfishSocketListeners(airship);
+        }
+    });
+
+    // **Eliminar el Bismarck cuando el servidor lo indique**
+    socket.on("remove-bismarck", () => {
+        if (bismarck) {
+            console.log("Eliminando Bismarck...");
+            bismarck.destroy();
+            bismarck = null;
+        }
+    });
+
+    // **Eliminar el Swordfish cuando el servidor lo indique**
+    socket.on("remove-swordfish", () => {
+        if (airship) {
+            console.log("Eliminando Swordfish...");
+            airship.destroy();
+            airship = null;
+        }
+    });
 }
 
 function update() {
-    if (bismarck && ) {
+    if (bismarck && playerRole === "bismarck") {
         bismarck.update();
     }
-    if (airship) airship.update();
+
+    if (airship && playerRole === "swordfish") {
+        airship.update();
+    }
 }
