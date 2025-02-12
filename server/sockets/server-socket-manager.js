@@ -22,6 +22,8 @@ export class ServerSocketManager {
 
             socket.on("swordfish-move", (position) => this.handleSwordfishPosition(socket, position));
 
+            socket.on("swordfish-fire", (missile) => this.handleSwordfishFire(socket, missile));
+
             socket.on("disconnect", () => this.handleDisconnect(socket));
         });
     }
@@ -102,14 +104,23 @@ export class ServerSocketManager {
 		}, 1000);
 	}
 	
+    handleSwordfishPosition(socket, position) {
+		// **Guardar la posición en el servidor**
+		const player = this.getSwordfishPlayer();
+		if (player) {
+			player.position = position;
+		}
 	
+		// **Reenviar la posición a todos los clientes, incluido el que movió**
+		socket.broadcast.emit("swordfish-move", position);
+    }
 
-    handleSwordfishPosition(socket, movement) {
-        socket.broadcast.emit("swordfish-move", movement);
+    handleSwordfishFire(socket, missile) {
+		this.io.emit("swordfish-fire", missile);
     }
 
     handleDisconnect(socket) {
-		console.log(`Jugador desconectado: ${socket.id}`);
+		console.log(`Jugador desconectado: ${socket. id}`);
 		
 		const player = this.players.get(socket.id);
 		if (player) {

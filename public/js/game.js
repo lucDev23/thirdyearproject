@@ -55,7 +55,7 @@ async function create() {
         if (!airship) {
             console.log("Creando Swordfish...");
             airship = new Swordfish(this, position.x, position.y, socket);
-            setupSwordfishSocketListeners(airship);
+            setupSwordfishSocketListeners(airship, this);
         }
 
 		this.physics.add.overlap(airship, this.bismarckMissiles, (swordfish, missile) => {
