@@ -1,8 +1,9 @@
 import AirshipMissile from "./SwordfishMissile.js";
+import Missile from "./Missile.js";
+import Position  from "./Position.js";
 
 //SOCKET EVENTS
-import { sendSwordfishMovement } from "../sockets/client-socket-manager.js";
-import { Position } from "./Position.js";
+import { sendSwordfishFire, sendSwordfishPosition } from "../sockets/client-socket-manager.js";
 
 export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, socket) {
@@ -71,35 +72,29 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
         // if (this.socket) {
         //     this.socket.emit("move", { x: this.x, y: this.y, rotation: this.rotation });
         // }
-        sendSwordfishMovement(new Position(this.x, this.y, this.rotation));
+        sendSwordfishPosition(new Position(this.x, this.y, this.rotation));
     }
 
     shootMissile() {
         // Calcular la posición de inicio del misil un poco adelante del avión
-        const missileOffset = 50;
+        const missileOffset = 0;
         const missileX = this.x + Math.cos(this.rotation) * missileOffset;
         const missileY = this.y + Math.sin(this.rotation) * missileOffset;
-
+    
         // Calcular el ángulo de disparo (invertido)
-        const invertedRotation = this.rotation + Math.PI;
-        
-        // Crear el misil en la posición calculada con la dirección invertida
-        const missile = new AirshipMissile(this.scene, missileX, missileY, invertedRotation);
-        this.scene.physics.add.existing(missile);
-
-        // Ajustar la velocidad del misil
-        const speed = 70;
-        this.scene.physics.velocityFromRotation(invertedRotation, speed, missile.body.velocity);
-
-        // Eliminar el misil después de 6 segundos
-        this.scene.time.delayedCall(6000, () => {
-            missile.destroy();
-        });
-
-        // Establecer el cooldown de disparo
+        const missileRotation = this.rotation;
+    
+        // Enviar el misil por socket (igual que Bismarck)
+        this.sendSwordfishMissile(missileX, missileY, missileRotation);
+    
+        // Cooldown del disparo
         this.canShoot = false;
         this.scene.time.delayedCall(this.shootDelay, () => {
             this.canShoot = true;
         });
+    }
+
+    sendSwordfishMissile(x, y, rotation) {
+        sendSwordfishFire(new Missile("swordfish", new Position(x, y, rotation)))
     }
 }

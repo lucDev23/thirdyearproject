@@ -16,7 +16,7 @@ export default class SwordfishMissile extends Phaser.Physics.Arcade.Sprite {
 		this.setRotation(invertedAngle);  // Asegura que el misil tenga la rotación correcta
 
 		// Calcular la velocidad basada en el ángulo
-		const speed = 5;  // Puedes ajustar la velocidad según sea necesario
+		const speed = 50;  // Puedes ajustar la velocidad según sea necesario
 		scene.physics.velocityFromRotation(invertedAngle, speed, this.body.velocity);
 
 		// Eliminar el misil después de 6 segundos

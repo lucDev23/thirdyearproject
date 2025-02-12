@@ -1,4 +1,5 @@
 import BismarckMissile from "../models/BismarckMissile.js";
+import SwordfishMissile from "../models/SwordfishMissile.js";
 
 export const socket = io(); // Conectarse al servidor WebSocket
 
@@ -23,8 +24,13 @@ export function sendBismarckFire(missile) {
 }
 
 // Emitir movimiento del Swordfish
-export function sendSwordfishMovement(position) {
+export function sendSwordfishPosition(position) {
     socket.emit("swordfish-move", position);
+}
+
+export function sendSwordfishFire(missile) {
+    console.log(missile);
+	socket.emit("swordfish-fire", missile);
 }
 
 // **Bismarck escucha a los aviones**
@@ -42,11 +48,15 @@ export function setupBismarckSocketListeners(bismarck, scene) {
 }
 
 // **Swordfish escucha al Bismarck**
-export function setupSwordfishSocketListeners(swordfish) {
-    socket.on("swordfish-move", (movement) => {
+export function setupSwordfishSocketListeners(swordfish, scene) {
+    socket.on("swordfish-move", (position) => {
         if (swordfish) {
-            swordfish.setPosition(movement.x, movement.y);
-            swordfish.setRotation(movement.rotation);
+            swordfish.setPosition(position.x, position.y);
+            swordfish.setRotation(position.rotation);
         }
     });
+
+    socket.on("swordfish-fire", (missile) => {
+		new SwordfishMissile(scene, missile.position.x, missile.position.y, missile.position.rotation);
+	})
 }
