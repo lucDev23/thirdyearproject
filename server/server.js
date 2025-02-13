@@ -11,7 +11,7 @@ import { Server } from "socket.io";
 // Módulos internos del proyecto
 import { APP_CONSTS } from "../config/app-const.js";
 import userRoutes from "./routes/user-routes.js";
-import { ServerSocketManager } from "./sockets/server-socket-manager.js";
+import { ServerSocketManager } from "./sockets/GameSocket.js";
 
 // Obtener __dirname en módulos ES
 const _filename = fileURLToPath(import.meta.url);

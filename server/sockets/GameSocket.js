@@ -1,4 +1,4 @@
-import { Player } from "../models/Player.js";
+import { PlayerOld } from "../models/PlayerOld.js";
 import { Position } from "../models/Position.js";
 
 export class ServerSocketManager {
@@ -42,8 +42,8 @@ export class ServerSocketManager {
 			type = "swordfish";
 		}
 
-		const player = new Player(socket.id, type);
-		this.players.set(socket.id, player);
+		const player = new PlayerOld(socket.id, type);
+		this.players.set(socket.id, PlayerOld);
 
 		socket.emit("player-assigned", { type });
 		console.log(`SERVER: Jugador ${socket.id} asignado como: ${type}`);
@@ -155,7 +155,7 @@ export class ServerSocketManager {
 		if (player) {
 			if (player.type === "bismarck") {
 				this.io.emit("remove-bismarck"); // Notificar a todos que eliminen el Bismarck
-			} else if (player.type === "swordfish") {
+			} else if (PlayerOld.type === "swordfish") {
 				this.io.emit("remove-swordfish"); // Notificar a todos que eliminen el Swordfish
 			}
 		}
