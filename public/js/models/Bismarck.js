@@ -1,9 +1,8 @@
-import BismarckMissile from "./BismarckMissile.js";
 import Missile from "./Missile.js";
 import Position from "./Position.js";
 
 //SOCKET EVENTS
-import { sendBismarckFire, sendBismarckPosition } from "../sockets/client-socket-manager.js";
+import { sendBismarckFire, sendBismarckHasWon, sendBismarckPosition } from "../sockets/client-socket-manager.js";
 
 export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, socket) {
@@ -23,7 +22,6 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		// Aplicar físicas con inercia
 		this.setDamping(true);
 		this.setDrag(0.98);
-		this.setMaxVelocity(100);
 
 		// Configurar teclas de control
 		this.cursors = scene.input.keyboard.addKeys({
@@ -34,9 +32,9 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		});
 
 		// Configuración de movimiento
-		this.speed = 60;
+		this.speed = 6;
 		this.rotationSpeed = 3;
-		this.acceleration = 0.02;
+		this.acceleration = 0.04;
 		this.currentSpeed = 0;
 
 		// Control de disparo
@@ -84,7 +82,7 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		// Enviar posición al servidor
 		sendBismarckPosition(new Position(this.x, this.y, this.rotation));
 
-		if (this.x >= this.scene.scale.width - 10 && !this.hasWon) {
+		if (this.x >= this.scene.scale.width - 75 && !this.hasWon) {
 			this.hasWon = true;
 			console.log("¡Victoria! El Bismarck llegó al borde derecho.");
 			sendBismarckHasWon();
