@@ -6,7 +6,7 @@ import Swordfish from "./models/Swordfish.js";
 import { setupTerrain } from "./helpers/terrain.js";
 
 // SOCKETS
-import { joinGame, sendBismarckHitSwordfish, setupBismarckSocketListeners, setupSwordfishSocketListeners, socket } from "./sockets/client-socket-manager.js";
+import { joinGame, sendBismarckHitSwordfish, sendSwordfishHitBismarck, setupBismarckSocketListeners, setupSwordfishSocketListeners, socket } from "./sockets/client-socket-manager.js";
 
 const parentDiv = document.getElementById("phaser-game");
 
@@ -40,6 +40,7 @@ async function create() {
     setupTerrain(this);
 
 	this.bismarckMissiles = this.physics.add.group();
+    this.swordfishMissiles = this.physics.add.group();
 
     playerRole = await joinGame();
 
@@ -49,16 +50,23 @@ async function create() {
             bismarck = new Bismarck(this, position.x, position.y, socket);
             setupBismarckSocketListeners(bismarck, this);
         }
+
+        this.physics.add.overlap(bismarck, this.swordfishMissiles, (bismarck, missile) => {
+			console.log("¡Colisión detectada!");
+			missile.destroy();
+
+			sendSwordfishHitBismarck();
+		});
     });
 
     socket.on("create-swordfish", (position) => {
         if (!airship) {
-            // console.log("Creando Swordfish...");
+            console.log("Creando Swordfish...");
             airship = new Swordfish(this, position.x, position.y, socket);
             setupSwordfishSocketListeners(airship, this);
         }
 
-		this.physics.add.overlap(airship, this.bismarckMissiles, (swordfish, missile) => {
+		this.physics.add.overlap(airship, this.bismarckMissiles, (airship, missile) => {
 			console.log("¡Colisión detectada!");
 			missile.destroy();
 

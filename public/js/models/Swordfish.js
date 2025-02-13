@@ -81,7 +81,7 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
 
     shootMissile() {
         // Calcular la posición de inicio del misil un poco adelante del avión
-        const missileOffset = 0;
+        const missileOffset = -20;
         const missileX = this.x + Math.cos(this.rotation) * missileOffset;
         const missileY = this.y + Math.sin(this.rotation) * missileOffset;
     

@@ -50,6 +50,8 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
+		if (!this.active) return;
+		
 		// Rotación del barco (A y D) con inercia
 		if (this.cursors.left.isDown) {
 			this.setAngularVelocity(-this.rotationSpeed);
