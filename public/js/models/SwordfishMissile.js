@@ -8,8 +8,8 @@ export default class SwordfishMissile extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 
-		if (scene.swordfishMissile) {
-            scene.swordfishMissile.add(this);
+		if (scene.swordfishMissiles) {
+            scene.swordfishMissiles.add(this);
         }
 
 		// Invertir la rotación para disparar en el lado opuesto
