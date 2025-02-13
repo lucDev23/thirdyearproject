@@ -16,6 +16,4 @@ export function setupTerrain(scene, horizontalPadding = 25, verticalPadding = 40
 		scene.scale.width - horizontalPadding * 2, 
 		scene.scale.height - verticalPadding * 2
 	);
-
-	return { horizontalPadding, verticalPadding, bounds: scene.physics.world.bounds };
 }

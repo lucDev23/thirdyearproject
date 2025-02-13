@@ -31,9 +31,9 @@ export default class Swordfish extends Phaser.Physics.Arcade.Sprite {
 
 		// Configurar teclas de control
 		this.cursors = scene.input.keyboard.addKeys({
-			up: Phaser.Input.Keyboard.KeyCodes.UP,
-			left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-			right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+			up: Phaser.Input.Keyboard.KeyCodes.W,
+			left: Phaser.Input.Keyboard.KeyCodes.A,
+			right: Phaser.Input.Keyboard.KeyCodes.D,
 			space: Phaser.Input.Keyboard.KeyCodes.SPACE // Tecla de disparo
 		});
 
