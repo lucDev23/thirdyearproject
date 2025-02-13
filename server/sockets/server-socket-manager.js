@@ -25,6 +25,8 @@ export class ServerSocketManager {
             socket.on("swordfish-fire", (missile) => this.handleSwordfishFire(socket, missile));
 
 			socket.on("swordfish-hit-bismarck", () => this.handleSwordfishHitBismarck(socket));
+			
+			socket.on("bismarck-winner", () => this.handleBismarckHasWon(socket));
 
             socket.on("disconnect", () => this.handleDisconnect(socket));
         });
@@ -139,6 +141,11 @@ export class ServerSocketManager {
 				console.log("SERVER: Reaparición del Bismarck emitida", spawnPosition);
 			}
 		}, 1000);
+	}
+	
+	handleBismarckHasWon(socket) {
+		console.log(`SERVER: El jugador ${socket.id} ha ganado al llegar al borde derecho.`);
+		this.io.emit("bismarck-winner");
 	}
 
     handleDisconnect(socket) {

@@ -91,6 +91,16 @@ async function create() {
             airship = null;
         }
     });
+
+	socket.on("bismarck-winner", () => {
+		const popup = document.getElementById("popup");
+		popup.style.display = "block";
+	});
+	
+	// Agregar el listener para cerrar el popup
+	document.getElementById("closePopup").addEventListener("click", () => {
+		document.getElementById("popup").style.display = "none";
+	});
 }
 
 function update() {
