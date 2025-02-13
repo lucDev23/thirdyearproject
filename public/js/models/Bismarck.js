@@ -34,7 +34,7 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		});
 
 		// Configuración de movimiento
-		this.speed = 6;
+		this.speed = 60;
 		this.rotationSpeed = 3;
 		this.acceleration = 0.02;
 		this.currentSpeed = 0;
@@ -47,6 +47,8 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 		this.pointer = this.scene.input.activePointer;
 
 		this.setDepth(1);
+
+		this.hasWon = false
 	}
 
 	update() {
@@ -81,6 +83,12 @@ export default class Bismarck extends Phaser.Physics.Arcade.Sprite {
 
 		// Enviar posición al servidor
 		sendBismarckPosition(new Position(this.x, this.y, this.rotation));
+
+		if (this.x >= this.scene.scale.width - 10 && !this.hasWon) {
+			this.hasWon = true;
+			console.log("¡Victoria! El Bismarck llegó al borde derecho.");
+			sendBismarckHasWon();
+		}
 	}
 
 	shootMissile() {
