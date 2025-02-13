@@ -24,6 +24,8 @@ export class ServerSocketManager {
 
             socket.on("swordfish-fire", (missile) => this.handleSwordfishFire(socket, missile));
 
+			socket.on("swordfish-hit-bismarck", () => this.handleSwordfishHitBismarck(socket));
+
             socket.on("disconnect", () => this.handleDisconnect(socket));
         });
     }
@@ -78,7 +80,6 @@ export class ServerSocketManager {
 		socket.broadcast.emit("bismarck-move", position);
 	}
 	
-
 	handleBismarckFire(socket, missile) {
 		this.io.emit("bismarck-fire", missile);
     }
@@ -118,6 +119,27 @@ export class ServerSocketManager {
     handleSwordfishFire(socket, missile) {
 		this.io.emit("swordfish-fire", missile);
     }
+
+	handleSwordfishHitBismarck(socket) {
+		console.log(`SERVER: Hit recibido del socket ${socket.id} - destruyendo el acorazado Bismarck y reiniciando en 1 segundo.`);
+	
+		// Emitir el evento para que todos los clientes eliminen el Bismarck
+		this.io.emit("remove-bismarck");
+	
+		// Esperar 1 segundo para recrear la entidad del Bismarck
+		setTimeout(() => {
+			// Obtener el jugador que controla el Swordfish
+			const bismarckPlayer = this.getBismarckPlayer();
+			if (bismarckPlayer) {
+				// Establecer una posición de reaparición (modifica las coordenadas según necesites)
+				const spawnPosition = new Position(0, 300, 0);
+				bismarckPlayer.position = spawnPosition;
+				// Emitir el evento para que los clientes creen nuevamente el Swordfish
+				this.io.emit("create-bismarck", spawnPosition);
+				console.log("SERVER: Reaparición del Bismarck emitida", spawnPosition);
+			}
+		}, 1000);
+	}
 
     handleDisconnect(socket) {
 		console.log(`Jugador desconectado: ${socket. id}`);

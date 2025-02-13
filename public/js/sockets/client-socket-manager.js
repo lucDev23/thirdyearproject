@@ -36,6 +36,10 @@ export function sendSwordfishFire(missile) {
 	socket.emit("swordfish-fire", missile);
 }
 
+export function sendSwordfishHitBismarck() {
+	socket.emit("swordfish-hit-bismarck");
+}
+
 // **Bismarck escucha a los aviones**
 export function setupBismarckSocketListeners(bismarck, scene) {
     socket.on("bismarck-move", (position) => {
