@@ -35,7 +35,7 @@ app.use("/game", userRoutes);
 
 // Iniciar el servidor
 const server = app.listen(APP_CONSTS.SERVER_PORT, () => {
-    console.log(`Server running at http://localhost:${APP_CONSTS.SERVER_PORT}`);
+	console.log(`Server running at http://localhost:${APP_CONSTS.SERVER_PORT}`);
 });
 
 // Configuración de WebSocket

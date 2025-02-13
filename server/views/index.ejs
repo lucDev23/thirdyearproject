@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego con Phaser y Socket.IO</title>
-    
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/phaser/phaser.min.js"></script>
-    
-    <link rel="stylesheet" href="/css/game-terrain.css">
-    
-    <script type="module" src="/js/game.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Juego con Phaser y Socket.IO</title>
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/phaser/phaser.min.js"></script>
+	
+	<link rel="stylesheet" href="/css/game-terrain.css">
+	
+	<script type="module" src="/js/game.js"></script>
 </head>
 <body>
-    <div id="container">
-        <img id="background" src="/assets/game_terrain.png" alt="Fondo del juego">
-        <div id="phaser-game"></div>
+	<div id="container">
+		<img id="background" src="/assets/game_terrain.png" alt="Fondo del juego">
+		<div id="phaser-game"></div>
 
 		<div id="popup" style="display:none; position:absolute; top:50%; left:50%; transform: translate(-50%, -50%); background-color:#fff; padding:20px; border:2px solid #000; z-index:1000;">
 			<h2>¡Ganaste!</h2>
@@ -23,6 +23,6 @@
 			<button id="closePopup">Cerrar</button>
 		</div>
 
-    </div>
+	</div>
 </body>
 </html>

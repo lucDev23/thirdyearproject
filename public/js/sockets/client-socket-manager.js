@@ -4,19 +4,19 @@ import SwordfishMissile from "../models/SwordfishMissile.js";
 export const socket = io(); // Conectarse al servidor WebSocket
 
 export function joinGame() {
-    return new Promise((resolve) => {
-        socket.emit("join-game");
+	return new Promise((resolve) => {
+		socket.emit("join-game");
 
-        socket.on("player-assigned", (data) => {
-            console.log(`Jugador asignado como: ${data.type}`);
-            resolve(data.type);
-        });
-    });
+		socket.on("player-assigned", (data) => {
+			console.log(`Jugador asignado como: ${data.type}`);
+			resolve(data.type);
+		});
+	});
 }
 
 // Emitir movimiento del Bismarck
 export function sendBismarckPosition(position) {
-    socket.emit("bismarck-move", position);
+	socket.emit("bismarck-move", position);
 }
 
 export function sendBismarckFire(missile) {
@@ -29,7 +29,7 @@ export function sendBismarckHitSwordfish() {
 
 // Emitir movimiento del Swordfish
 export function sendSwordfishPosition(position) {
-    socket.emit("swordfish-move", position);
+	socket.emit("swordfish-move", position);
 }
 
 export function sendSwordfishFire(missile) {
@@ -46,12 +46,12 @@ export function sendBismarckHasWon() {
 
 // **Bismarck escucha a los aviones**
 export function setupBismarckSocketListeners(bismarck, scene) {
-    socket.on("bismarck-move", (position) => {
-        if (bismarck) {
-            bismarck.setPosition(position.x, position.y);
-            bismarck.setRotation(position.rotation);
-        }
-    });
+	socket.on("bismarck-move", (position) => {
+		if (bismarck) {
+			bismarck.setPosition(position.x, position.y);
+			bismarck.setRotation(position.rotation);
+		}
+	});
 
 	socket.on("bismarck-fire", (missile) => {
 		new BismarckMissile(scene, missile.position.x, missile.position.y, missile.position.rotation);
@@ -60,14 +60,14 @@ export function setupBismarckSocketListeners(bismarck, scene) {
 
 // **Swordfish escucha al Bismarck**
 export function setupSwordfishSocketListeners(swordfish, scene) {
-    socket.on("swordfish-move", (position) => {
-        if (swordfish) {
-            swordfish.setPosition(position.x, position.y);
-            swordfish.setRotation(position.rotation);
-        }
-    });
+	socket.on("swordfish-move", (position) => {
+		if (swordfish) {
+			swordfish.setPosition(position.x, position.y);
+			swordfish.setRotation(position.rotation);
+		}
+	});
 
-    socket.on("swordfish-fire", (missile) => {
+	socket.on("swordfish-fire", (missile) => {
 		new SwordfishMissile(scene, missile.position.x, missile.position.y, missile.position.rotation);
 	})
 }
