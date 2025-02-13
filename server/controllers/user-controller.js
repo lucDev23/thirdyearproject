@@ -1,5 +1,7 @@
 'use strict';
 
 export const getSetupSwordfish = async(req, res, next) => {
-	res.render('aircraft-carrier');
+	res.render('aircraft-carrier', {
+		swordfishCount: 10
+	});
 }

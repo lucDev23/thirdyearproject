@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Press Start 2P', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#main-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    height: 550px;
+    width: 937px;
+}
+
+#background {
+    position: absolute; /* Asegura que esté encima del contenedor */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1; /* Mantiene el fondo atrás */
+    background: linear-gradient(135deg, #80a7ce 0%, #16517d 100%);
+    background-size: 180% 180%;
+    animation: wave 4s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+}
+
+p {
+  position: absolute;
+  top: 5%;
+  left: 3%;
+  color: #000000;
+  background-color: #8c8c8c;
+  border: 5px solid black;
+  padding: 8px;
+  font-size: 15px;
+}
+
+#aircraft-carrier {
+    position: absolute;
+    height: 90%;
+    width: 80%;
+}
+
+#aircraft-container {
+    position: absolute;
+    display: table;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    top: 22%;
+    left: 35%;
+    width: 38%;
+    height: 30%;
+    transform: rotate(-10deg);
+}
+
+.swordfish {
+    height: 80px;
+    transform: rotate(-110deg);
+    cursor: pointer;
+}
+
+.swordfish:hover {
+    filter: drop-shadow(0px 0px 10px #ffffff);
+}
+
+.swordfish:active {
+  transform: rotate(-110deg) scale(1.1);
+}
+
+.clicked {
+  filter: drop-shadow(0px 0px 18px #52a8ff);
+}
+
+.swordfish-takeoff {
+  position: absolute;
+  top: 190px;
+  left: 400px;
+  transform: rotate(-10deg);
+}
+
+button {
+  border: 5px solid black;
+  background-color: #8c8c8c;
+  font-size: 12px;
+}
+
+#configure-button {
+    position: absolute;
+    width: 170px;
+    height: 50px;
+    right: 3%;
+    bottom: 5%;
+}
+
+#configure-button.enabled {
+  background-color: #d3c334;
+  cursor: pointer;
+}
+
+#configure-button:hover {
+  transform: scale(1.05);
+}
+
+.modal-background {
+  display: none;
+  position: fixed;
+  box-sizing: border-box;
+  height: 550px;
+  width: 937px;
+  background-color: rgba(105, 105, 105, 0.33); 
+}
+
+.modal-content {
+  position: relative;
+  margin: 5% auto;
+  background-color: #e4f1ff;
+  padding: 10px;
+  width: 600px;
+  height: 430px;
+  border-radius: 15px;
+  border: 5px solid rgb(38, 87, 131);
+  font-size: 25px;
+}
+
+#checkbox-container {
+  display: flex;
+  justify-content: space-around; /* Espacio entre las cajas */
+  align-items: center;
+  font-size: 22px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.checkbox-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:space-around;
+  padding: 10px;
+  border: 5px solid #707070;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  width: 200px; 
+  height: 300px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+input {
+  display: none;
+}
+
+/* Contenedor del checkbox personalizado */
+.custom-checkbox {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 4px solid #d3c334;
+  background-color: #e7e3bf;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Efecto de checkbox marcado */
+input:checked + .custom-checkbox {
+  background-color: #c4e8ca;
+  border-color: #24a92d;
+}
+
+/* Marca de verificación (usando pseudo-elemento) */
+input:checked + .custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid #000000;
+  border-width: 0 5px 5px 0;
+  transform: rotate(45deg);
+}
+
+#modal-buttons-container {
+  display: flex;
+  justify-content: center; /* Espacio entre las cajas */
+  align-items: center;
+  margin-top: 10px;
+}
+
+.modal-button {
+  padding: 10px;
+  margin: 8px;
+  background-color: #a2a2a2;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  transform: scale(1.05);
+}
+
+#cancel-button:hover {
+  background-color: #d22121;
+}
+
+#accept-button:hover {
+  background-color: #24d928;
+}
+

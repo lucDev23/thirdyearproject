@@ -3,9 +3,44 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Elegir avión</title>
+
+	<link rel="stylesheet" href="/css/aircraft-carrier.css">
 </head>
 <body>
-	<h1>Hola</h1>
+	<div id="main-container">
+        <div id="background"></div>
+        <p>Elegir un avión...</p>
+		<img id="aircraft-carrier" src="/assets/aircraft_carrier.png">
+		<div id="aircraft-container">
+			<% for(let i = 0; i < swordfishCount; i++) { %>
+				<img id="swordfish-<%= i+1 %>" class="swordfish" src="/assets/airship.png">
+			<% } %>
+		</div>
+		<button id="configure-button">Seleccionar tripulación</button>
+		<div id="modal-bg" class="modal-background">
+			<div id="modal" class="modal-content">
+				<div id="checkbox-container">
+					<label class="checkbox-box">
+					  <span>Operador</span>
+					  <!--Imagen operador-->
+					  <input type="checkbox" id="option-1">
+					  <span class="custom-checkbox"></span>
+					</label>
+					<label class="checkbox-box">
+					  <span>Vigía</span>
+					  <!--Imagen vigia-->
+					  <input type="checkbox" id="option-2">
+					  <span class="custom-checkbox"></span>
+					</label>
+				</div>
+				<div id="modal-buttons-container">
+					<button id="cancel-button" class="modal-button">Cancelar</button>
+					<button id="accept-button" class="modal-button">Aceptar</button>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="/js/helpers/aircraft-carrier.js"></script>
 </body>
 </html>
